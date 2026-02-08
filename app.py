@@ -31,7 +31,7 @@ st.markdown("""
         color: #d4af37;
     }
 
-    /* 3. RGB ANIMATED CONTAINERS (Keeping these as you liked them) */
+    /* 3. RGB ANIMATED CONTAINERS */
     .rgb-container {
         padding: 15px;
         border-radius: 12px;
@@ -51,23 +51,18 @@ st.markdown("""
         100% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; color: #ff0000; }
     }
 
-    /* 🔥 4. FIX: INPUT TEXT VISIBILITY (GOLDEN TEXT) 🔥 */
-    input[data-testid="stWidgetLabel"] {
-        color: white !important;
-    }
-    
+    /* 4. FIX: INPUT TEXT VISIBILITY (GOLDEN TEXT) */
     .stTextInput input {
-        color: #FFD700 !important; /* Bright Gold Text for Maximum Visibility */
+        color: #FFD700 !important; 
         background-color: rgba(0, 0, 0, 0.8) !important;
         border: 2px solid #d4af37 !important;
         font-size: 22px !important;
         font-weight: 800 !important;
         border-radius: 10px !important;
         padding: 15px !important;
-        opacity: 1 !important;
     }
 
-    /* 5. PINK & BLUE GRADIENT BUTTON (No RGB) */
+    /* 5. PINK & BLUE GRADIENT BUTTON */
     div.stButton > button:first-child {
         background: linear-gradient(90deg, #FF1493 0%, #00BFFF 100%) !important;
         color: white !important;
@@ -79,13 +74,6 @@ st.markdown("""
         width: 100% !important;
         box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4) !important;
         transition: 0.3s ease !important;
-        animation: none !important; /* Removing RGB animation */
-    }
-
-    div.stButton > button:first-child:hover {
-        transform: scale(1.02);
-        box-shadow: 0 8px 25px rgba(0, 191, 255, 0.6) !important;
-        filter: brightness(1.1);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -100,6 +88,21 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
+# --- EXTENDED RANDOM NAMES LIST (100+ NAMES) ---
+COMMON_NAMES = [
+    "AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU",
+    "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE",
+    "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA",
+    "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM",
+    "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI",
+    "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI",
+    "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE",
+    "ADIT", "ARYA", "BHAV", "CHET", "DAKS", "ESHA", "GOPA", "HARS", "ISHA", "JATN",
+    "KESH", "LOKI", "MANI", "NARE", "OMKA", "PARI", "RIYA", "SAHI", "TANU", "UTSA",
+    "VARU", "YASH", "ZAIN", "KUMA", "SING", "SHAR", "VERM", "GUPT", "YADA", "PATE",
+    "MISH", "THAK", "CHOU", "RAWA", "TIWA", "PAND", "BANS", "SONI", "JAIN", "KHAN"
+]
+
 # --- UI INTERFACE ---
 st.markdown('<div class="rgb-container">🛰️ Satellite Scanner Active</div>', unsafe_allow_html=True)
 st.write("### 📂 1. Select Locked PDF")
@@ -109,13 +112,9 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 st.markdown('<div class="rgb-container">💡 Hint Engine Standby</div>', unsafe_allow_html=True)
 st.write("### 🔍 2. Enter Hint (4 Letters)")
-# Visibility-fixed input
 custom_hint = st.text_input("type_here", placeholder="Type name here...", label_visibility="collapsed").upper().strip()
 
 st.markdown("<br>", unsafe_allow_html=True)
-
-# --- RECOVERY ENGINE ---
-COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU", "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE", "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA", "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM", "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI", "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI", "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE"]
 
 if uploaded_file:
     if st.button("🚀 EXECUTE RECOVERY ENGINE"):
