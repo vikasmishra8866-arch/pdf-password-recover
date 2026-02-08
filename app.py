@@ -7,7 +7,7 @@ st.set_page_config(page_title="Pawan PDF Unlocker Pro", page_icon="🔓")
 st.title("🔓 Advanced PDF Password Recovery")
 st.write("Pattern: 4 Letters (Name) + 4 Digits (Number)")
 
-# --- BIG INDIAN NAMES LIST (Expanded) ---
+# --- BIG INDIAN NAMES LIST ---
 COMMON_NAMES = [
     "AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU",
     "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE",
@@ -23,8 +23,8 @@ COMMON_NAMES = [
 
 uploaded_file = st.file_uploader("Locked PDF Upload Karein", type=["pdf"])
 
-# --- NEW OPTION: CUSTOM HINT BOX ---
-custom_hint = st.text_input("Kuch yaad hai? (e.g. Naam ke 4 Letters)", "").upper().strip()
+# User Hint Box
+custom_hint = st.text_input("Andaja wale 4 Letters dalein (e.g. VIKA)", "").upper().strip()
 
 if uploaded_file:
     if st.button("Start Deep Recovery 🚀"):
@@ -33,29 +33,39 @@ if uploaded_file:
         status_text = st.empty()
         bar = st.progress(0)
         
-        # Check list taiyar karna (Pehle user ki hint, phir baki list)
+        # --- PRIORITY LIST SETTING ---
         search_list = []
-        if custom_hint and len(custom_hint) == 4:
-            search_list.append(custom_hint)
         
-        # Baki names ko list mein add karna (duplicate hatakar)
+        # 1. Sabse pehle User ki hint ko list mein sabse upar dalo
+        if custom_hint and len(custom_hint) >= 4:
+            # Agar naam bada hai toh uske 4-letter combinations nikalo
+            for i in range(len(custom_hint) - 3):
+                search_list.append(custom_hint[i:i+4])
+        
+        # 2. Phir baaki common names ko add karo (duplicates hatakar)
         for name in COMMON_NAMES:
             if name not in search_list:
                 search_list.append(name)
         
-        total_names = len(search_list)
+        total_patterns = len(search_list)
         
         try:
             for idx, prefix in enumerate(search_list):
-                status_text.text(f"Testing Pattern: {prefix}XXXX ({idx+1}/{total_names})")
-                bar.progress((idx + 1) / total_names)
+                # UI par batayega ki abhi kya check ho raha hai
+                if idx == 0 and custom_hint:
+                    status_text.warning(f"🔍 Priority Check: Testing your hint '{prefix}' first...")
+                else:
+                    status_text.text(f"Scanning Pattern: {prefix}XXXX ({idx+1}/{total_patterns})")
                 
-                # 0000 se 9999 tak check karna
+                bar.progress((idx + 1) / total_patterns)
+                
+                # 0000 to 9999 digits loop
                 for n in range(10000):
                     password = f"{prefix}{n:04d}"
                     try:
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            st.success(f"🎊 FOUND IT! Password: **{password}**")
+                            st.success(f"🎊 FOUND IT! Password is: **{password}**")
+                            
                             out_buf = io.BytesIO()
                             pdf.save(out_buf)
                             st.download_button("📥 Download Unlocked PDF", out_buf.getvalue(), "unlocked.pdf")
@@ -66,10 +76,10 @@ if uploaded_file:
                 if found: break
             
             if not found:
-                st.error("❌ Password nahi mila. Kripya koi nayi hint try karein.")
+                st.error("❌ Password nahi mila. Kripya koi dusri hint ya naam try karein.")
                     
         except Exception as e:
             st.error(f"Error: {e}")
 
 st.markdown("---")
-st.info("Tip: Agar aapne koi hint dali hai, toh ye sabse pehle use hi check karega.")
+st.caption("Pawan PDF Recovery Tool - Brute Force Pattern Engine")
