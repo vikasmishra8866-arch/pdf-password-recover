@@ -5,10 +5,10 @@ import io
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Vikas Mishra | PDF Recovery", page_icon="🔑", layout="centered")
 
-# --- CUSTOM CSS FOR RGB NEON, GLOSSY BOXES & ANIMATED TEXT ---
+# --- CUSTOM CSS FOR RGB NEON, GLOSSY BOXES & FIXED VISIBILITY ---
 st.markdown("""
     <style>
-    /* Main Background - High Visibility Dark Gradient */
+    /* Main Background */
     .stApp {
         background: radial-gradient(circle, #1e213a 0%, #050505 100%);
         color: #ffffff;
@@ -23,7 +23,6 @@ st.markdown("""
         border: 1px solid rgba(212, 175, 55, 0.4);
         margin-bottom: 30px;
         backdrop-filter: blur(10px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
     
     .main-title {
@@ -34,7 +33,7 @@ st.markdown("""
         text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
     }
 
-    /* RGB ANIMATED BOXES WITH TEXT */
+    /* RGB ANIMATED CONTAINERS */
     .rgb-container {
         padding: 20px;
         border-radius: 15px;
@@ -57,14 +56,21 @@ st.markdown("""
         100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; color: #ff0000; }
     }
 
-    /* Glossy Inputs */
+    /* 🔥 FIX: INPUT TEXT VISIBILITY 🔥 */
     .stTextInput input {
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(212, 175, 55, 0.3) !important;
-        color: white !important;
-        font-size: 18px !important;
+        background: rgba(255, 255, 255, 0.15) !important; /* Slightly brighter bg */
+        border: 2px solid rgba(212, 175, 55, 0.5) !important;
+        color: #FFFFFF !important; /* Force Pure White Text */
+        font-size: 20px !important; /* Bigger Font */
+        font-weight: bold !important; /* Bold Text */
         border-radius: 10px !important;
         padding: 12px !important;
+        caret-color: white !important; /* Typing cursor color */
+    }
+
+    /* Placeholder Visibility */
+    .stTextInput input::placeholder {
+        color: rgba(255, 255, 255, 0.5) !important;
     }
 
     /* RGB Execution Button */
@@ -104,17 +110,16 @@ COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", 
 
 # --- UI INTERFACE ---
 
-# 1. First RGB Box with Active Text
 st.markdown('<div class="rgb-container">🛰️ Satellite Scanner Active</div>', unsafe_allow_html=True)
 st.write("### 📂 1. Select Locked PDF")
 uploaded_file = st.file_uploader("", type=["pdf"], label_visibility="collapsed")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# 2. Second RGB Box with Instruction Text
 st.markdown('<div class="rgb-container">💡 Hint Engine Standby</div>', unsafe_allow_html=True)
 st.write("### 🔍 2. Enter Hint (4 Letters)")
-custom_hint = st.text_input("", placeholder="Hint: e.g. VIKA", label_visibility="collapsed").upper().strip()
+# Hint Box with enhanced visibility
+custom_hint = st.text_input("", placeholder="Type here (e.g. VIKA)", label_visibility="collapsed").upper().strip()
 
 st.markdown("<br>", unsafe_allow_html=True)
 
