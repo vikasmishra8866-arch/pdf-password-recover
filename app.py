@@ -49,14 +49,14 @@ st.markdown("""
         font-weight: bold !important;
     }
 
-    /* 🔥 FIX: GOLDEN TEXT IN HINT BOX 🔥 */
+    /* 🔥 UPDATED: RED TEXT IN HINT BOX 🔥 */
     .stTextInput input {
-        color: #FFD700 !important; /* Golden Color */
+        color: #FF0000 !important; /* Red Color for Input */
         background-color: rgba(255, 255, 255, 0.1) !important;
-        border: 2px solid #d4af37 !important;
-        font-size: 24px !important; /* Thoda bada font */
+        border: 2px solid #FF0000 !important; /* Border also Red to match */
+        font-size: 24px !important;
         font-weight: 900 !important;
-        text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Light Golden Glow */
+        text-shadow: 0 0 8px rgba(255, 0, 0, 0.6); /* Red Glow */
     }
 
     /* Pink-Blue Button */
