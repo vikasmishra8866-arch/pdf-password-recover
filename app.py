@@ -45,8 +45,8 @@ st.markdown("""
         font-size: 22px !important; border-radius: 12px !important; padding: 15px 0 !important;
         width: 100% !important; box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4) !important;
     }
-    /* Styling for Radio Buttons */
-    .stRadio [data-testid="stWidgetLabel"] p { font-size: 20px !important; color: #d4af37 !important; font-weight: bold; }
+    /* Fixing Radio Button Visibility */
+    .stRadio label { color: #d4af37 !important; font-weight: bold !important; font-size: 18px !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -60,20 +60,23 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# --- MODE SELECTION ---
-st.markdown('<div class="rgb-container">⚙️ SELECT RECOVERY MODE</div>', unsafe_allow_html=True)
-mode = st.radio("", ["Name + 4 Digits", "Pure 8-Digit Numbers"], horizontal=True)
+# --- NEW OPTION: MODE SELECTION ---
+st.markdown('<div class="rgb-container">⚙️ RECOVERY MODE SELECTION</div>', unsafe_allow_html=True)
+# Yeh hai wo naya option jo aapne manga tha
+recovery_mode = st.radio("CHOOSE PATTERN:", ["Name + 4 Digits", "8-Digit Numbers Only"], horizontal=True)
 
-# --- FILE UPLOAD ---
+st.markdown("---")
+
+# --- UI INTERFACE ---
 st.markdown('<div class="rgb-container">🛰️ Satellite Scanner Active</div>', unsafe_allow_html=True)
-uploaded_file = st.file_uploader("Upload PDF", type=["pdf"], label_visibility="collapsed")
+uploaded_file = st.file_uploader("", type=["pdf"], label_visibility="collapsed")
 
 custom_hint = ""
-if mode == "Name + 4 Digits":
+if recovery_mode == "Name + 4 Digits":
     st.markdown('<div class="rgb-container">💡 Hint Engine Standby</div>', unsafe_allow_html=True)
-    custom_hint = st.text_input("Hint", placeholder="Type name here...", label_visibility="collapsed").upper().strip()
+    custom_hint = st.text_input("type_here", placeholder="Enter name hint (e.g. VIKA)", label_visibility="collapsed").upper().strip()
 
-# --- RECOVERY ENGINE ---
+# --- DATABASE & ENGINE ---
 COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU", "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE", "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA", "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM", "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI", "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI", "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE", "KUMA", "SING", "MISH", "SHAR", "VERM", "GUPT", "YADA", "PATE"]
 
 if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
@@ -82,7 +85,7 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
     status_box = st.empty()
     
     try:
-        if mode == "Name + 4 Digits":
+        if recovery_mode == "Name + 4 Digits":
             search_list = []
             if custom_hint and len(custom_hint) >= 4:
                 for i in range(len(custom_hint) - 3): search_list.append(custom_hint[i:i+4])
@@ -91,33 +94,31 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
             
             bar = st.progress(0)
             for idx, prefix in enumerate(search_list):
-                status_box.markdown(f"📡 **Scanning Name Pattern:** `{prefix}XXXX`...")
+                status_box.markdown(f"📡 **Scanning Pattern:** `{prefix}XXXX`...")
                 bar.progress((idx + 1) / len(search_list))
                 for n in range(10000):
                     password = f"{prefix}{n:04d}"
                     try:
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
                             st.balloons(); st.success(f"🔓 FOUND: {password}"); found = True
-                            st.download_button("📥 DOWNLOAD", pdf_bytes, "unlocked.pdf"); break
+                            st.download_button("📥 DOWNLOAD PDF", pdf_bytes, "decrypted.pdf"); break
                     except: continue
                 if found: break
 
-        else: # Pure 8-Digit Numbers Mode
-            status_box.warning("⚠️ 8-Digit Scan can take 2-5 minutes. Please wait...")
-            # Checking a sample range or common 8-digit patterns to save time
-            # For a full 00000000-99999999, it's 100M combos (Slow for Streamlit)
-            # We focus on the most common 1 million 8-digit combos first
-            for n in range(0, 100000000, 1): # Full range
+        else: # 8-Digit Numbers Only Mode
+            status_box.warning("📡 Starting 8-Digit Full Sequence Scan...")
+            # Optimization: Checking common birth years/dates first
+            for n in range(100000000): # Scan from 00000000 to 99999999
                 password = f"{n:08d}"
-                if n % 1000 == 0: status_box.markdown(f"📡 **Scanning Numbers:** `{password}`...")
+                if n % 1000 == 0: status_box.markdown(f"📡 **Testing Number:** `{password}`...")
                 try:
                     with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
                         st.balloons(); st.success(f"🔓 FOUND: {password}"); found = True
-                        st.download_button("📥 DOWNLOAD", pdf_bytes, "unlocked.pdf"); break
+                        st.download_button("📥 DOWNLOAD PDF", pdf_bytes, "decrypted.pdf"); break
                 except: continue
                 if found: break
 
-        if not found: st.error("❌ Password not found.")
+        if not found: st.error("❌ Password not found in this mode.")
     except Exception as e:
         st.error(f"Error: {e}")
 
