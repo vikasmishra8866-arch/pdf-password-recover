@@ -35,27 +35,28 @@ st.markdown("""
         100% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; color: #ff0000; }
     }
 
-    /* 🔥 YELLOW TEXT FIX FOR RADIO OPTIONS 🔥 */
+    /* YELLOW TEXT FOR RADIO OPTIONS */
     div[data-testid="stRadio"] label {
-        color: #FFFF00 !important; /* Pure Yellow Color */
+        color: #FFFF00 !important; 
         font-size: 22px !important;
         font-weight: 900 !important;
         cursor: pointer;
     }
     
     div[data-testid="stRadio"] p {
-        color: #FFFFFF !important; /* 'CHOOSE PATTERN' title in White */
+        color: #FFFFFF !important; 
         font-size: 18px !important;
         font-weight: bold !important;
     }
 
-    /* Input Hint Box Visibility */
+    /* 🔥 FIX: GOLDEN TEXT IN HINT BOX 🔥 */
     .stTextInput input {
-        color: #00FF00 !important;
+        color: #FFD700 !important; /* Golden Color */
         background-color: rgba(255, 255, 255, 0.1) !important;
         border: 2px solid #d4af37 !important;
-        font-size: 22px !important;
-        font-weight: 800 !important;
+        font-size: 24px !important; /* Thoda bada font */
+        font-weight: 900 !important;
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Light Golden Glow */
     }
 
     /* Pink-Blue Button */
@@ -80,7 +81,6 @@ st.markdown("""
 
 # --- MODE SELECTION ---
 st.markdown('<div class="rgb-container">⚙️ RECOVERY MODE SELECTION</div>', unsafe_allow_html=True)
-# Yeh options ab Yellow dikhenge
 recovery_mode = st.radio("CHOOSE SCANNING PATTERN:", ["Name + 4 Digits", "8-Digit Numbers Only"], horizontal=True)
 
 st.markdown("---")
