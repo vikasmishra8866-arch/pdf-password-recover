@@ -2,12 +2,83 @@ import streamlit as st
 import pikepdf
 import io
 
-st.set_page_config(page_title="Pawan PDF Unlocker Pro", page_icon="🔓")
+# --- PAGE CONFIG ---
+st.set_page_config(page_title="Pawan PDF Unlocker Pro", page_icon="🔓", layout="wide")
 
-st.title("🔓 Advanced PDF Password Recovery")
-st.write("Pattern: 4 Letters (Name) + 4 Digits (Number)")
+# --- CUSTOM PREMIUM CSS ---
+st.markdown("""
+    <style>
+    /* Main Background */
+    .stApp {
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        color: white;
+    }
+    
+    /* Header Style */
+    .main-title {
+        font-size: 45px;
+        font-weight: 800;
+        color: #00d2ff;
+        text-align: center;
+        text-shadow: 2px 2px 10px rgba(0,210,255,0.3);
+        margin-bottom: 0px;
+    }
+    
+    .managed-by {
+        font-size: 18px;
+        color: #ffffff;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 5px 20px;
+        border-radius: 50px;
+        width: fit-content;
+        margin: 0 auto 30px auto;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    
+    /* Card/Box Style */
+    .stFileUploader, .stTextInput, .stButton {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Button Animation */
+    div.stButton > button:first-child {
+        background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-weight: bold;
+        font-size: 20px;
+        border-radius: 10px;
+        transition: 0.3s all;
+        box-shadow: 0 4px 15px rgba(0,210,255,0.4);
+        width: 100%;
+    }
+    
+    div.stButton > button:first-child:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(0,210,255,0.6);
+        background: linear-gradient(90deg, #3a7bd5 0%, #00d2ff 100%);
+    }
 
-# --- BIG INDIAN NAMES LIST ---
+    /* Input Field Focus */
+    .stTextInput input {
+        color: white !important;
+        background-color: rgba(0,0,0,0.2) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- HEADER SECTION ---
+st.markdown('<p class="main-title">🔓 PAWAN PDF RECOVERY PRO</p>', unsafe_allow_html=True)
+st.markdown('<p class="managed-by">💎 Managed by: <b>VIKAS MISHRA</b></p>', unsafe_allow_html=True)
+
+# --- APP LOGIC ---
 COMMON_NAMES = [
     "AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU",
     "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE",
@@ -21,54 +92,53 @@ COMMON_NAMES = [
     "RAJE", "SURE", "MAHE", "NARE", "JITE", "MUKE", "KESH", "KAMA", "KANT", "SHRA"
 ]
 
-uploaded_file = st.file_uploader("Locked PDF Upload Karein", type=["pdf"])
+col1, col2 = st.columns([1, 1])
 
-# User Hint Box
-custom_hint = st.text_input("Andaja wale 4 Letters dalein (e.g. VIKA)", "").upper().strip()
+with col1:
+    st.markdown("### 📥 1. Upload Document")
+    uploaded_file = st.file_uploader("", type=["pdf"])
+
+with col2:
+    st.markdown("### 💡 2. Add Your Hint")
+    custom_hint = st.text_input("", placeholder="Andaja wale 4 letters yahan likhein...").upper().strip()
+
+st.markdown("---")
 
 if uploaded_file:
-    if st.button("Start Deep Recovery 🚀"):
+    if st.button("🚀 START DEEP SCAN"):
         pdf_bytes = uploaded_file.read()
         found = False
-        status_text = st.empty()
-        bar = st.progress(0)
         
-        # --- PRIORITY LIST SETTING ---
+        # Priority Logic
         search_list = []
-        
-        # 1. Sabse pehle User ki hint ko list mein sabse upar dalo
         if custom_hint and len(custom_hint) >= 4:
-            # Agar naam bada hai toh uske 4-letter combinations nikalo
             for i in range(len(custom_hint) - 3):
                 search_list.append(custom_hint[i:i+4])
         
-        # 2. Phir baaki common names ko add karo (duplicates hatakar)
         for name in COMMON_NAMES:
             if name not in search_list:
                 search_list.append(name)
         
-        total_patterns = len(search_list)
+        status_box = st.empty()
+        bar = st.progress(0)
+        
+        total = len(search_list)
         
         try:
             for idx, prefix in enumerate(search_list):
-                # UI par batayega ki abhi kya check ho raha hai
-                if idx == 0 and custom_hint:
-                    status_text.warning(f"🔍 Priority Check: Testing your hint '{prefix}' first...")
-                else:
-                    status_text.text(f"Scanning Pattern: {prefix}XXXX ({idx+1}/{total_patterns})")
+                status_box.info(f"🔍 Testing Pattern: {prefix}XXXX ({idx+1}/{total})")
+                bar.progress((idx + 1) / total)
                 
-                bar.progress((idx + 1) / total_patterns)
-                
-                # 0000 to 9999 digits loop
                 for n in range(10000):
                     password = f"{prefix}{n:04d}"
                     try:
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            st.success(f"🎊 FOUND IT! Password is: **{password}**")
+                            st.balloons()
+                            st.success(f"✅ FOUND IT! Password is: {password}")
                             
                             out_buf = io.BytesIO()
                             pdf.save(out_buf)
-                            st.download_button("📥 Download Unlocked PDF", out_buf.getvalue(), "unlocked.pdf")
+                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", out_buf.getvalue(), "unlocked.pdf")
                             found = True
                             break
                     except pikepdf.PasswordError:
@@ -76,10 +146,8 @@ if uploaded_file:
                 if found: break
             
             if not found:
-                st.error("❌ Password nahi mila. Kripya koi dusri hint ya naam try karein.")
-                    
+                st.error("❌ Password nahi mila. Kripya dusri hint try karein.")
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"Technical Error: {e}")
 
-st.markdown("---")
-st.caption("Pawan PDF Recovery Tool - Brute Force Pattern Engine")
+st.markdown("<br><center>© 2026 PAWAN AUTO FINANCE - PREMIUM RECOVERY TOOLS</center>", unsafe_allow_html=True)
