@@ -49,14 +49,14 @@ st.markdown("""
         font-weight: bold !important;
     }
 
-    /* 🔥 UPDATED: RED TEXT IN HINT BOX 🔥 */
+    /* RED TEXT IN HINT BOX */
     .stTextInput input {
-        color: #FF0000 !important; /* Red Color for Input */
+        color: #FF0000 !important; 
         background-color: rgba(255, 255, 255, 0.1) !important;
-        border: 2px solid #FF0000 !important; /* Border also Red to match */
+        border: 2px solid #FF0000 !important; 
         font-size: 24px !important;
         font-weight: 900 !important;
-        text-shadow: 0 0 8px rgba(255, 0, 0, 0.6); /* Red Glow */
+        text-shadow: 0 0 8px rgba(255, 0, 0, 0.6); 
     }
 
     /* Pink-Blue Button */
@@ -92,9 +92,10 @@ uploaded_file = st.file_uploader("", type=["pdf"], label_visibility="collapsed")
 custom_hint = ""
 if recovery_mode == "Name + 4 Digits":
     st.markdown('<div class="rgb-container">💡 Hint Engine Standby</div>', unsafe_allow_html=True)
-    custom_hint = st.text_input("type_here", placeholder="Type name hint...", label_visibility="collapsed").upper().strip()
+    # Hint input me ab case sensitive support hai
+    custom_hint = st.text_input("type_here", placeholder="Type name hint (e.g. Vikas)", label_visibility="collapsed").strip()
 
-# --- ENGINE ---
+# --- DATABASE ---
 COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU", "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE", "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA", "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM", "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI", "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI", "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE", "KUMA", "SING", "MISH", "SHAR", "VERM", "GUPT", "YADA", "PATE"]
 
 if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
@@ -106,9 +107,20 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
         if recovery_mode == "Name + 4 Digits":
             search_list = []
             if custom_hint and len(custom_hint) >= 4:
-                for i in range(len(custom_hint) - 3): search_list.append(custom_hint[i:i+4])
+                # Add original hint, ALL CAPS hint, and lower case hint
+                for i in range(len(custom_hint) - 3):
+                    chunk = custom_hint[i:i+4]
+                    search_list.append(chunk)           # Jaisa likha hai (e.g. Vika)
+                    search_list.append(chunk.upper())     # Capital (VIKA)
+                    search_list.append(chunk.lower())     # Small (vika)
+            
             for name in COMMON_NAMES:
-                if name not in search_list: search_list.append(name)
+                if name not in search_list:
+                    search_list.append(name)             # Capital
+                    search_list.append(name.lower())     # Small
+            
+            # Remove duplicates while keeping order
+            search_list = list(dict.fromkeys(search_list))
             
             bar = st.progress(0)
             for idx, prefix in enumerate(search_list):
