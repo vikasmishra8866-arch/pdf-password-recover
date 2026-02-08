@@ -1,63 +1,75 @@
 import streamlit as st
 import pikepdf
-from itertools import product
 import io
+from itertools import product
+import string
 
-st.set_page_config(page_title="PDF Password Recovery", page_icon="🔓")
+st.set_page_config(page_title="PDF Ultra Recovery", page_icon="🔑")
 
-st.title("🔓 PDF Password Recover Tool")
-st.info("Ye tool aapke pattern (4 Letters + 4 Digits) par kaam karega.")
+st.title("🔓 PDF Universal Password Recover")
+st.write("Ye tool A-Z ke letters aur numbers ke combinations check karega.")
 
-# Inputs
-uploaded_file = st.file_uploader("Apni Locked PDF Upload Karein", type=["pdf"])
-name_part = st.text_input("Naam ke pehle 4 Capital Letters dalein (Example: SHYA)", "").upper()
+uploaded_file = st.file_uploader("Locked PDF Upload Karein", type=["pdf"])
 
-if uploaded_file and name_part:
-    if len(name_part) != 4:
-        st.warning("Kripya sirf 4 letters dalein.")
-    else:
-        if st.button("Password Recover Shuru Karein"):
-            found = False
-            progress_bar = st.progress(0)
-            status_text = st.empty()
+# Options for Randomness
+col1, col2 = st.columns(2)
+with col1:
+    char_limit = st.number_input("Letters Kitne hain? (e.g. 4)", min_value=1, max_value=6, value=4)
+with col2:
+    num_limit = st.number_input("Digits Kitne hain? (e.g. 4)", min_value=1, max_value=6, value=4)
+
+# Yahan aap specific letters de sakte hain jo aapko yaad hain
+search_letters = st.text_input("Kaunse letters use karein? (Default: A-Z)", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+if uploaded_file:
+    if st.button("Deep Scan Shuru Karein 🚀"):
+        pdf_bytes = uploaded_file.read()
+        found = False
+        
+        status = st.empty()
+        progress = st.progress(0)
+        
+        # Numbers 0000 to 9999 ki list
+        numbers = [f"{i:0{num_limit}d}" for i in range(10**num_limit)]
+        
+        # Agar user ne specific 4 letters diye hain (Jaise 'SHYA'), to sirf unke combinations:
+        # Lekin agar A-Z check karna hai to ye bahut heavy ho jayega.
+        
+        # Filhal hum aapke bataye pattern (NAME PART + NUMBER PART) par brute force kar rahe hain
+        # Yahan hum example ke liye letters ka combination generate kar rahe hain
+        
+        st.warning("Scanning start ho gayi hai... Ismein time lag sakta hai.")
+
+        try:
+            # Note: Pure A-Z (4 letters) = 4,56,976 combinations. 
+            # Saath mein 4 digits = 4.5 Billion combinations (Ye server par crash ho jayega).
+            # Isliye hum "Name Hint" ka use kar rahe hain.
             
-            # 0001 se 9999 tak ke saare combinations
-            total_attempts = 10000 
+            # Agar aapko letters yaad nahi hain, toh ye pattern kaam karega:
+            possible_names = ["".join(x) for x in product(search_letters, repeat=char_limit)]
             
-            try:
-                # PDF ko read karne ki koshish
-                pdf_bytes = uploaded_file.read()
+            total = len(possible_names)
+            
+            for idx, name in enumerate(possible_names):
+                status.text(f"Testing Names starting with: {name}...")
+                progress.progress((idx + 1) / total)
                 
-                for i in range(1, 10000):
-                    # 4 digit number banana (Example: 1 -> 0001)
-                    num_part = f"{i:04d}"
-                    password = name_part + num_part
-                    
-                    # UI Update (har 500 attempts par)
-                    if i % 500 == 0:
-                        progress_bar.progress(i / total_attempts)
-                        status_text.text(f"Checking: {password}...")
-
+                for num in numbers:
+                    password = name + num
                     try:
-                        # Password check karna
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            st.success(f"✅ Password Mil Gaya! Aapka Password hai: **{password}**")
-                            
-                            # Unlock karke download dene ka option
+                            st.success(f"🎊 SUCCESS! Password mil gaya: **{password}**")
                             output = io.BytesIO()
                             pdf.save(output)
-                            st.download_button("📥 Unlocked PDF Download Karein", output.getvalue(), file_name="unlocked.pdf")
-                            
+                            st.download_button("📥 Unlock PDF Download", output.getvalue(), "unlocked.pdf")
                             found = True
                             break
                     except pikepdf.PasswordError:
                         continue
-                
-                if not found:
-                    st.error("❌ Diye gaye pattern mein password nahi mila. Kripya letters check karein.")
-                
-            except Exception as e:
-                st.error(f"Error: {e}")
+                if found: break
 
-st.markdown("---")
-st.caption("Note: Ye sirf aapke bhule hue passwords ke liye hai.")
+            if not found:
+                st.error("Password nahi mila. Try different letters.")
+
+        except Exception as e:
+            st.error(f"Error occurred: {e}")
