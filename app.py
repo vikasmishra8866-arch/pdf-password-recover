@@ -5,16 +5,16 @@ import io
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Vikas Mishra | PDF Recovery", page_icon="🔑", layout="centered")
 
-# --- CUSTOM CSS FOR RGB NEON, GLOSSY BOXES & FIXED VISIBILITY ---
+# --- CUSTOM CSS FOR HIGH VISIBILITY & PINK-BLUE BUTTON ---
 st.markdown("""
     <style>
-    /* Main Background */
+    /* 1. Background Visibility */
     .stApp {
         background: radial-gradient(circle, #1e213a 0%, #050505 100%);
         color: #ffffff;
     }
     
-    /* Premium Header */
+    /* 2. Premium Header */
     .header-box {
         text-align: center;
         padding: 25px;
@@ -22,7 +22,6 @@ st.markdown("""
         border-radius: 20px;
         border: 1px solid rgba(212, 175, 55, 0.4);
         margin-bottom: 30px;
-        backdrop-filter: blur(10px);
     }
     
     .main-title {
@@ -30,67 +29,63 @@ st.markdown("""
         font-weight: 900;
         letter-spacing: 5px;
         color: #d4af37;
-        text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
     }
 
-    /* RGB ANIMATED CONTAINERS */
+    /* 3. RGB ANIMATED CONTAINERS (Keeping these as you liked them) */
     .rgb-container {
-        padding: 20px;
-        border-radius: 15px;
+        padding: 15px;
+        border-radius: 12px;
         position: relative;
-        margin-bottom: 25px;
-        backdrop-filter: blur(15px);
-        background: rgba(0, 0, 0, 0.6);
+        margin-bottom: 20px;
+        background: rgba(0, 0, 0, 0.7);
         border: 2px solid transparent;
         text-align: center;
         font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 2px;
         animation: rgb-border 4s linear infinite;
     }
 
     @keyframes rgb-border {
-        0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; color: #ff0000; }
-        33% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; color: #00ff00; }
-        66% { border-color: #0000ff; box-shadow: 0 0 15px #0000ff; color: #0000ff; }
-        100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; color: #ff0000; }
+        0% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; color: #ff0000; }
+        33% { border-color: #00ff00; box-shadow: 0 0 10px #00ff00; color: #00ff00; }
+        66% { border-color: #0000ff; box-shadow: 0 0 10px #0000ff; color: #0000ff; }
+        100% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; color: #ff0000; }
     }
 
-    /* 🔥 FIX: INPUT TEXT VISIBILITY 🔥 */
-    .stTextInput input {
-        background: rgba(255, 255, 255, 0.15) !important; /* Slightly brighter bg */
-        border: 2px solid rgba(212, 175, 55, 0.5) !important;
-        color: #FFFFFF !important; /* Force Pure White Text */
-        font-size: 20px !important; /* Bigger Font */
-        font-weight: bold !important; /* Bold Text */
-        border-radius: 10px !important;
-        padding: 12px !important;
-        caret-color: white !important; /* Typing cursor color */
-    }
-
-    /* Placeholder Visibility */
-    .stTextInput input::placeholder {
-        color: rgba(255, 255, 255, 0.5) !important;
-    }
-
-    /* RGB Execution Button */
-    div.stButton > button:first-child {
-        background: linear-gradient(90deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-        background-size: 400%;
+    /* 🔥 4. FIX: INPUT TEXT VISIBILITY (GOLDEN TEXT) 🔥 */
+    input[data-testid="stWidgetLabel"] {
         color: white !important;
-        border: none;
-        font-weight: 900;
-        font-size: 20px;
-        border-radius: 12px;
-        padding: 15px 0;
-        width: 100%;
-        animation: rainbow-button 10s linear infinite;
-        box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+    
+    .stTextInput input {
+        color: #FFD700 !important; /* Bright Gold Text for Maximum Visibility */
+        background-color: rgba(0, 0, 0, 0.8) !important;
+        border: 2px solid #d4af37 !important;
+        font-size: 22px !important;
+        font-weight: 800 !important;
+        border-radius: 10px !important;
+        padding: 15px !important;
+        opacity: 1 !important;
     }
 
-    @keyframes rainbow-button {
-        0% { background-position: 0% 50%; }
-        100% { background-position: 100% 50%; }
+    /* 5. PINK & BLUE GRADIENT BUTTON (No RGB) */
+    div.stButton > button:first-child {
+        background: linear-gradient(90deg, #FF1493 0%, #00BFFF 100%) !important;
+        color: white !important;
+        border: none !important;
+        font-weight: 900 !important;
+        font-size: 22px !important;
+        border-radius: 12px !important;
+        padding: 15px 0 !important;
+        width: 100% !important;
+        box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4) !important;
+        transition: 0.3s ease !important;
+        animation: none !important; /* Removing RGB animation */
+    }
+
+    div.stButton > button:first-child:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 191, 255, 0.6) !important;
+        filter: brightness(1.1);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -105,11 +100,7 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# --- DATA ---
-COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU", "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE", "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA", "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM", "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI", "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI", "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE"]
-
 # --- UI INTERFACE ---
-
 st.markdown('<div class="rgb-container">🛰️ Satellite Scanner Active</div>', unsafe_allow_html=True)
 st.write("### 📂 1. Select Locked PDF")
 uploaded_file = st.file_uploader("", type=["pdf"], label_visibility="collapsed")
@@ -118,10 +109,13 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 st.markdown('<div class="rgb-container">💡 Hint Engine Standby</div>', unsafe_allow_html=True)
 st.write("### 🔍 2. Enter Hint (4 Letters)")
-# Hint Box with enhanced visibility
-custom_hint = st.text_input("", placeholder="Type here (e.g. VIKA)", label_visibility="collapsed").upper().strip()
+# Visibility-fixed input
+custom_hint = st.text_input("type_here", placeholder="Type name here...", label_visibility="collapsed").upper().strip()
 
 st.markdown("<br>", unsafe_allow_html=True)
+
+# --- RECOVERY ENGINE ---
+COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU", "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE", "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA", "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM", "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI", "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI", "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE"]
 
 if uploaded_file:
     if st.button("🚀 EXECUTE RECOVERY ENGINE"):
