@@ -92,7 +92,6 @@ uploaded_file = st.file_uploader("", type=["pdf"], label_visibility="collapsed")
 custom_hint = ""
 if recovery_mode == "Name + 4 Digits":
     st.markdown('<div class="rgb-container">💡 Hint Engine Standby</div>', unsafe_allow_html=True)
-    # Hint input me ab case sensitive support hai
     custom_hint = st.text_input("type_here", placeholder="Type name hint (e.g. Vikas)", label_visibility="collapsed").strip()
 
 # --- DATABASE ---
@@ -107,19 +106,17 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
         if recovery_mode == "Name + 4 Digits":
             search_list = []
             if custom_hint and len(custom_hint) >= 4:
-                # Add original hint, ALL CAPS hint, and lower case hint
                 for i in range(len(custom_hint) - 3):
                     chunk = custom_hint[i:i+4]
-                    search_list.append(chunk)           # Jaisa likha hai (e.g. Vika)
-                    search_list.append(chunk.upper())     # Capital (VIKA)
-                    search_list.append(chunk.lower())     # Small (vika)
+                    search_list.append(chunk)
+                    search_list.append(chunk.upper())
+                    search_list.append(chunk.lower())
             
             for name in COMMON_NAMES:
                 if name not in search_list:
-                    search_list.append(name)             # Capital
-                    search_list.append(name.lower())     # Small
+                    search_list.append(name)
+                    search_list.append(name.lower())
             
-            # Remove duplicates while keeping order
             search_list = list(dict.fromkeys(search_list))
             
             bar = st.progress(0)
@@ -129,9 +126,16 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                 for n in range(10000):
                     password = f"{prefix}{n:04d}"
                     try:
+                        # FIX: Nayi unlocked file save karni hogi
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            st.balloons(); st.success(f"🔓 FOUND: {password}"); found = True
-                            st.download_button("📥 DOWNLOAD", pdf_bytes, "unlocked.pdf"); break
+                            st.balloons()
+                            st.success(f"🔓 FOUND: {password}")
+                            found = True
+                            
+                            output = io.BytesIO()
+                            pdf.save(output) # Ye bina password ke save hoga
+                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked.pdf")
+                            break
                     except: continue
                 if found: break
 
@@ -142,8 +146,14 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                 if n % 2000 == 0: status_box.markdown(f"📡 **Testing:** `{password}`...")
                 try:
                     with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                        st.balloons(); st.success(f"🔓 FOUND: {password}"); found = True
-                        st.download_button("📥 DOWNLOAD", pdf_bytes, "unlocked.pdf"); break
+                        st.balloons()
+                        st.success(f"🔓 FOUND: {password}")
+                        found = True
+                        
+                        output = io.BytesIO()
+                        pdf.save(output) # Nayi unlocked PDF
+                        st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked.pdf")
+                        break
                 except: continue
                 if found: break
 
