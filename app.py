@@ -127,7 +127,7 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                     password = f"{prefix}{n:04d}"
                     try:
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            # 🛡️ SAFETY CHECK: Kya hum sach mein pages access kar paa rahe hain?
+                            # 🛡️ VERIFICATION STEP: Sirf wahi password 'Done' hoga jo pages read kar sakega
                             if len(pdf.pages) > 0:
                                 st.balloons()
                                 st.success(f"🔓 FOUND: {password}")
@@ -140,14 +140,14 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                     except: continue
                 if found: break
 
-        else: # 8-Digit Numbers Only Mode
-            status_box.warning("📡 Starting 8-Digit sequence... This may take time.")
+        else: # 8-Digit Numbers Mode
+            status_box.warning("📡 Starting 8-Digit sequence...")
             for n in range(100000000):
                 password = f"{n:08d}"
                 if n % 2000 == 0: status_box.markdown(f"📡 **Testing:** `{password}`...")
                 try:
                     with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                        # 🛡️ SAFETY CHECK
+                        # 🛡️ VERIFICATION STEP
                         if len(pdf.pages) > 0:
                             st.balloons()
                             st.success(f"🔓 FOUND: {password}")
