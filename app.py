@@ -126,34 +126,37 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                 for n in range(10000):
                     password = f"{prefix}{n:04d}"
                     try:
-                        # FIX: Nayi unlocked file save karni hogi
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            st.balloons()
-                            st.success(f"🔓 FOUND: {password}")
-                            found = True
-                            
-                            output = io.BytesIO()
-                            pdf.save(output) # Ye bina password ke save hoga
-                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked.pdf")
-                            break
+                            # 🛡️ SAFETY CHECK: Kya hum sach mein pages access kar paa rahe hain?
+                            if len(pdf.pages) > 0:
+                                st.balloons()
+                                st.success(f"🔓 FOUND: {password}")
+                                found = True
+                                
+                                output = io.BytesIO()
+                                pdf.save(output) 
+                                st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked.pdf")
+                                break
                     except: continue
                 if found: break
 
-        else: # 8-Digit Numbers Mode
+        else: # 8-Digit Numbers Only Mode
             status_box.warning("📡 Starting 8-Digit sequence... This may take time.")
             for n in range(100000000):
                 password = f"{n:08d}"
                 if n % 2000 == 0: status_box.markdown(f"📡 **Testing:** `{password}`...")
                 try:
                     with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                        st.balloons()
-                        st.success(f"🔓 FOUND: {password}")
-                        found = True
-                        
-                        output = io.BytesIO()
-                        pdf.save(output) # Nayi unlocked PDF
-                        st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked.pdf")
-                        break
+                        # 🛡️ SAFETY CHECK
+                        if len(pdf.pages) > 0:
+                            st.balloons()
+                            st.success(f"🔓 FOUND: {password}")
+                            found = True
+                            
+                            output = io.BytesIO()
+                            pdf.save(output) 
+                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked.pdf")
+                            break
                 except: continue
                 if found: break
 
