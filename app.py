@@ -127,16 +127,20 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                     password = f"{prefix}{n:04d}"
                     try:
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            # 🛡️ VERIFICATION STEP: Sirf wahi password 'Done' hoga jo pages read kar sakega
+                            # 🔥 DEEP VERIFICATION 🔥
+                            # 1. Pages check
                             if len(pdf.pages) > 0:
-                                st.balloons()
-                                st.success(f"🔓 FOUND: {password}")
-                                found = True
-                                
-                                output = io.BytesIO()
-                                pdf.save(output) 
-                                st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked.pdf")
-                                break
+                                # 2. Metadata access check (Ye galat pass par fail ho jayega)
+                                if pdf.docinfo:
+                                    # 3. Final Save Check (Agar ye bina error ke save hua matlab pass 100% sahi hai)
+                                    output = io.BytesIO()
+                                    pdf.save(output) 
+                                    
+                                    st.balloons()
+                                    st.success(f"🔓 VERIFIED FOUND: {password}")
+                                    found = True
+                                    st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked_original.pdf")
+                                    break
                     except: continue
                 if found: break
 
@@ -147,20 +151,18 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                 if n % 2000 == 0: status_box.markdown(f"📡 **Testing:** `{password}`...")
                 try:
                     with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                        # 🛡️ VERIFICATION STEP
-                        if len(pdf.pages) > 0:
-                            st.balloons()
-                            st.success(f"🔓 FOUND: {password}")
-                            found = True
-                            
+                        if len(pdf.pages) > 0 and pdf.docinfo:
                             output = io.BytesIO()
                             pdf.save(output) 
-                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked.pdf")
+                            st.balloons()
+                            st.success(f"🔓 VERIFIED FOUND: {password}")
+                            found = True
+                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked_original.pdf")
                             break
                 except: continue
                 if found: break
 
-        if not found: st.error("❌ Password not found.")
+        if not found: st.error("❌ Password not found or recovery failed.")
     except Exception as e:
         st.error(f"Error: {e}")
 
