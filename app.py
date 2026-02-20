@@ -94,8 +94,20 @@ if recovery_mode == "Name + 4 Digits":
     st.markdown('<div class="rgb-container">💡 Hint Engine Standby</div>', unsafe_allow_html=True)
     custom_hint = st.text_input("type_here", placeholder="Type name hint (e.g. Vikas)", label_visibility="collapsed").strip()
 
-# --- DATABASE ---
-COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU", "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE", "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA", "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM", "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI", "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI", "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE", "KUMA", "SING", "MISH", "SHAR", "VERM", "GUPT", "YADA", "PATE"]
+# --- EXPANDED DATABASE ---
+COMMON_NAMES = [
+    "AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU", 
+    "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE", 
+    "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA", 
+    "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM", 
+    "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI", 
+    "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI", 
+    "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE", 
+    "KUMA", "SING", "MISH", "SHAR", "VERM", "GUPT", "YADA", "PATE", "CHAU", "KHAN",
+    "RAWA", "NEGI", "BISH", "SAIN", "DHIL", "SIDD", "KAUR", "BALA", "ALOK", "ASIF",
+    "BABU", "BALI", "BINK", " CHET", "DAKS", "ESHA", "FAIZ", "GOPL", "HARS", "ISHA",
+    "JNAT", "KAVS", "LOKS", "MAHE", "NARE", "OMPR", "PRAT", "QASH", "RASH", "SUDH"
+]
 
 if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
     pdf_bytes = uploaded_file.read()
@@ -126,21 +138,18 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                 for n in range(10000):
                     password = f"{prefix}{n:04d}"
                     try:
+                        # Pikepdf verification
                         with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            # 🔥 DEEP VERIFICATION 🔥
-                            # 1. Pages check
-                            if len(pdf.pages) > 0:
-                                # 2. Metadata access check (Ye galat pass par fail ho jayega)
-                                if pdf.docinfo:
-                                    # 3. Final Save Check (Agar ye bina error ke save hua matlab pass 100% sahi hai)
-                                    output = io.BytesIO()
-                                    pdf.save(output) 
-                                    
-                                    st.balloons()
-                                    st.success(f"🔓 VERIFIED FOUND: {password}")
-                                    found = True
-                                    st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked_original.pdf")
-                                    break
+                            # 🔥 STRICT VERIFICATION 🔥
+                            # Kuch PDFs galat pass par bhi open ho jati hain, isliye save karke verify karenge
+                            test_output = io.BytesIO()
+                            pdf.save(test_output) # Agar password galat hai toh ye line error degi
+                            
+                            st.balloons()
+                            st.success(f"🔓 VERIFIED FOUND: {password}")
+                            found = True
+                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", test_output.getvalue(), "unlocked_original.pdf")
+                            break
                     except: continue
                 if found: break
 
@@ -151,14 +160,13 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
                 if n % 2000 == 0: status_box.markdown(f"📡 **Testing:** `{password}`...")
                 try:
                     with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                        if len(pdf.pages) > 0 and pdf.docinfo:
-                            output = io.BytesIO()
-                            pdf.save(output) 
-                            st.balloons()
-                            st.success(f"🔓 VERIFIED FOUND: {password}")
-                            found = True
-                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", output.getvalue(), "unlocked_original.pdf")
-                            break
+                        test_output = io.BytesIO()
+                        pdf.save(test_output)
+                        st.balloons()
+                        st.success(f"🔓 VERIFIED FOUND: {password}")
+                        found = True
+                        st.download_button("📥 DOWNLOAD UNLOCKED PDF", test_output.getvalue(), "unlocked_original.pdf")
+                        break
                 except: continue
                 if found: break
 
