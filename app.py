@@ -1,6 +1,8 @@
 import streamlit as st
 import pikepdf
 import io
+import pdfcrack
+import qpdf
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Vikas Mishra | PDF Recovery", page_icon="🔑", layout="centered")
