@@ -94,56 +94,60 @@ if recovery_mode == "Name + 4 Digits":
 COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "VIKA", "MAHE", "SHRE"]
 
 if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
-    # Save temporary file for pdfcrack
+    # File save for PDFCrack
     with open("temp.pdf", "wb") as f:
         f.write(uploaded_file.getbuffer())
-    
+        
     found = False
     status_box = st.empty()
     
     try:
-        # 1. Generate Wordlist
+        # 1. Building Wordlist for accuracy
         status_box.info("📝 Building smart wordlist...")
         with open("mypass.txt", "w") as f:
             if recovery_mode == "Name + 4 Digits":
                 search_prefixes = [custom_hint] if custom_hint else COMMON_NAMES
                 for prefix in search_prefixes:
-                    for i in range(10000):
-                        f.write(f"{prefix.lower()}{i:04d}\n")
-                        f.write(f"{prefix.upper()}{i:04d}\n")
+                    if len(prefix) >= 4:
+                        prefix = prefix[:4]
+                        for i in range(10000):
+                            f.write(f"{prefix.lower()}{i:04d}\n")
+                            f.write(f"{prefix.upper()}{i:04d}\n")
             else:
                 for i in range(100000000):
                     f.write(f"{i:08d}\n")
 
-        # 2. Run PDFCrack Engine (The most accurate part)
-        status_box.markdown('<div class="rgb-container">📡 PDFCRACK ENGINE ACTIVE</div>', unsafe_allow_html=True)
-        cmd = f"pdfcrack -f temp.pdf -w mypass.txt"
+        # 2. RUNNING PDFCRACK (Direct Ubuntu Engine)
+        status_box.markdown('<div class="rgb-container">📡 SYSTEM CORE CRACKING ACTIVE...</div>', unsafe_allow_html=True)
+        
+        # Calling PDFCrack directly
+        cmd = "pdfcrack -f temp.pdf -w mypass.txt"
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, text=True)
         stdout, _ = process.communicate()
         
-        # 3. Extract verified password
+        # 3. VERIFYING RESULT
         match = re.search(r"found user-password: (.+)", stdout)
         if match:
             password = match.group(1).strip()
-            # Clean password for pikepdf save
+            # Strict cleaning
             final_pass = re.sub(r'[^a-zA-Z0-9]', '', password)
             
             st.balloons()
             st.success(f"🔓 VERIFIED FOUND: {final_pass}")
             
-            # Use pikepdf to create the downloadable decrypted file
+            # Using pikepdf only to save the file for user
             with pikepdf.open("temp.pdf", password=final_pass) as pdf:
-                unlocked_io = io.BytesIO()
-                pdf.save(unlocked_io)
-                st.download_button("📥 DOWNLOAD UNLOCKED PDF", unlocked_io.getvalue(), f"Unlocked_{final_pass}.pdf")
+                out = io.BytesIO()
+                pdf.save(out)
+                st.download_button("📥 DOWNLOAD UNLOCKED PDF", out.getvalue(), f"Unlocked_{final_pass}.pdf")
             found = True
         else:
-            st.error("❌ Password not found or recovery failed.")
+            st.error("❌ Password not found. Please check your hint.")
 
     except Exception as e:
         st.error(f"Error: {e}")
     finally:
-        # Cleanup files
+        # Cleanup
         if os.path.exists("temp.pdf"): os.remove("temp.pdf")
         if os.path.exists("mypass.txt"): os.remove("mypass.txt")
 
