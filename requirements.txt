@@ -1,3 +1,5 @@
 
 pdfcrack
 qpdf
+streamlit
+pikepdf
