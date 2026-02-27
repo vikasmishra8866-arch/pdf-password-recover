@@ -1,6 +1,9 @@
 import streamlit as st
 import pikepdf
 import io
+import subprocess
+import os
+import re
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Vikas Mishra | PDF Recovery", page_icon="🔑", layout="centered")
@@ -34,22 +37,17 @@ st.markdown("""
         66% { border-color: #0000ff; box-shadow: 0 0 10px #0000ff; color: #0000ff; }
         100% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; color: #ff0000; }
     }
-
-    /* YELLOW TEXT FOR RADIO OPTIONS */
     div[data-testid="stRadio"] label {
         color: #FFFF00 !important; 
         font-size: 22px !important;
         font-weight: 900 !important;
         cursor: pointer;
     }
-    
     div[data-testid="stRadio"] p {
         color: #FFFFFF !important; 
         font-size: 18px !important;
         font-weight: bold !important;
     }
-
-    /* RED TEXT IN HINT BOX */
     .stTextInput input {
         color: #FF0000 !important; 
         background-color: rgba(255, 255, 255, 0.1) !important;
@@ -58,8 +56,6 @@ st.markdown("""
         font-weight: 900 !important;
         text-shadow: 0 0 8px rgba(255, 0, 0, 0.6); 
     }
-
-    /* Pink-Blue Button */
     div.stButton > button:first-child {
         background: linear-gradient(90deg, #FF1493 0%, #00BFFF 100%) !important;
         color: white !important; border: none !important; font-weight: 900 !important;
@@ -95,83 +91,60 @@ if recovery_mode == "Name + 4 Digits":
     custom_hint = st.text_input("type_here", placeholder="Type name hint (e.g. Vikas)", label_visibility="collapsed").strip()
 
 # --- EXPANDED DATABASE ---
-COMMON_NAMES = [
-    "AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "ANSH", "ANUP", "ASHU", 
-    "DEEP", "DEVA", "DINE", "GAUR", "GURU", "HARI", "HEMA", "INDU", "JAYA", "JAYE", 
-    "JYOT", "KAMA", "KAPI", "KIRA", "KUNA", "LALU", "MADH", "MANO", "MEEN", "MOHA", 
-    "MUKA", "NEER", "NITI", "PANK", "PAWA", "PIYU", "POOJ", "PRAD", "PRAK", "PRAM", 
-    "RAHU", "RAJA", "RAJE", "RAKE", "RAMA", "RANI", "RAVI", "RISH", "ROHA", "ROHI", 
-    "SACH", "SAME", "SANJ", "SANT", "SARA", "SATI", "SHIV", "SHYA", "SONU", "SUMI", 
-    "SUNI", "SURA", "TARA", "UMES", "VIKA", "VIMA", "VINA", "VINO", "VIVE", "YOGE", 
-    "KUMA", "SING", "MISH", "SHAR", "VERM", "GUPT", "YADA", "PATE", "CHAU", "KHAN",
-    "RAWA", "NEGI", "BISH", "SAIN", "DHIL", "SIDD", "KAUR", "BALA", "ALOK", "ASIF",
-    "BABU", "BALI", "BINK", " CHET", "DAKS", "ESHA", "FAIZ", "GOPL", "HARS", "ISHA",
-    "JNAT", "KAVS", "LOKS", "MAHE", "NARE", "OMPR", "PRAT", "QASH", "RASH", "SUDH"
-]
+COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "VIKA", "MAHE", "SHRE"]
 
 if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
-    pdf_bytes = uploaded_file.read()
+    # Save temporary file for pdfcrack
+    with open("temp.pdf", "wb") as f:
+        f.write(uploaded_file.getbuffer())
+    
     found = False
     status_box = st.empty()
     
     try:
-        if recovery_mode == "Name + 4 Digits":
-            search_list = []
-            if custom_hint and len(custom_hint) >= 4:
-                for i in range(len(custom_hint) - 3):
-                    chunk = custom_hint[i:i+4]
-                    search_list.append(chunk)
-                    search_list.append(chunk.upper())
-                    search_list.append(chunk.lower())
-            
-            for name in COMMON_NAMES:
-                if name not in search_list:
-                    search_list.append(name)
-                    search_list.append(name.lower())
-            
-            search_list = list(dict.fromkeys(search_list))
-            
-            bar = st.progress(0)
-            for idx, prefix in enumerate(search_list):
-                status_box.markdown(f"📡 **Scanning:** `{prefix}XXXX`...")
-                bar.progress((idx + 1) / len(search_list))
-                for n in range(10000):
-                    password = f"{prefix}{n:04d}"
-                    try:
-                        # Pikepdf verification
-                        with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                            # 🔥 STRICT VERIFICATION 🔥
-                            # Kuch PDFs galat pass par bhi open ho jati hain, isliye save karke verify karenge
-                            test_output = io.BytesIO()
-                            pdf.save(test_output) # Agar password galat hai toh ye line error degi
-                            
-                            st.balloons()
-                            st.success(f"🔓 VERIFIED FOUND: {password}")
-                            found = True
-                            st.download_button("📥 DOWNLOAD UNLOCKED PDF", test_output.getvalue(), "unlocked_original.pdf")
-                            break
-                    except: continue
-                if found: break
+        # 1. Generate Wordlist
+        status_box.info("📝 Building smart wordlist...")
+        with open("mypass.txt", "w") as f:
+            if recovery_mode == "Name + 4 Digits":
+                search_prefixes = [custom_hint] if custom_hint else COMMON_NAMES
+                for prefix in search_prefixes:
+                    for i in range(10000):
+                        f.write(f"{prefix.lower()}{i:04d}\n")
+                        f.write(f"{prefix.upper()}{i:04d}\n")
+            else:
+                for i in range(100000000):
+                    f.write(f"{i:08d}\n")
 
-        else: # 8-Digit Numbers Mode
-            status_box.warning("📡 Starting 8-Digit sequence...")
-            for n in range(100000000):
-                password = f"{n:08d}"
-                if n % 2000 == 0: status_box.markdown(f"📡 **Testing:** `{password}`...")
-                try:
-                    with pikepdf.open(io.BytesIO(pdf_bytes), password=password) as pdf:
-                        test_output = io.BytesIO()
-                        pdf.save(test_output)
-                        st.balloons()
-                        st.success(f"🔓 VERIFIED FOUND: {password}")
-                        found = True
-                        st.download_button("📥 DOWNLOAD UNLOCKED PDF", test_output.getvalue(), "unlocked_original.pdf")
-                        break
-                except: continue
-                if found: break
+        # 2. Run PDFCrack Engine (The most accurate part)
+        status_box.markdown('<div class="rgb-container">📡 PDFCRACK ENGINE ACTIVE</div>', unsafe_allow_html=True)
+        cmd = f"pdfcrack -f temp.pdf -w mypass.txt"
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, text=True)
+        stdout, _ = process.communicate()
+        
+        # 3. Extract verified password
+        match = re.search(r"found user-password: (.+)", stdout)
+        if match:
+            password = match.group(1).strip()
+            # Clean password for pikepdf save
+            final_pass = re.sub(r'[^a-zA-Z0-9]', '', password)
+            
+            st.balloons()
+            st.success(f"🔓 VERIFIED FOUND: {final_pass}")
+            
+            # Use pikepdf to create the downloadable decrypted file
+            with pikepdf.open("temp.pdf", password=final_pass) as pdf:
+                unlocked_io = io.BytesIO()
+                pdf.save(unlocked_io)
+                st.download_button("📥 DOWNLOAD UNLOCKED PDF", unlocked_io.getvalue(), f"Unlocked_{final_pass}.pdf")
+            found = True
+        else:
+            st.error("❌ Password not found or recovery failed.")
 
-        if not found: st.error("❌ Password not found or recovery failed.")
     except Exception as e:
         st.error(f"Error: {e}")
+    finally:
+        # Cleanup files
+        if os.path.exists("temp.pdf"): os.remove("temp.pdf")
+        if os.path.exists("mypass.txt"): os.remove("mypass.txt")
 
 st.markdown("<br><center style='color:#777; font-size:12px;'>VIKAS MISHRA PRIVATE SUITE © 2026</center>", unsafe_allow_html=True)
