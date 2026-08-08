@@ -168,7 +168,6 @@ if uploaded_file and st.button("🚀 EXECUTE RECOVERY ENGINE"):
         
         # Merge dictionary
         search_prefixes.extend(COMMON_NAMES)
-        # Unique preserving order
         search_prefixes = list(dict.fromkeys(search_prefixes))
 
         total_prefixes = len(search_prefixes)
