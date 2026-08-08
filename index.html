@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vikas Mishra | Ultra PDF Recovery Engine Pro</title>
+
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS & PDF-Lib Engine -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+  <style>
+    :root {
+      --bg-ocean: #031329;
+      --card-navy: #0b1d3a;
+      --border-cyan: rgba(6, 182, 212, 0.25);
+      --accent-cyan: #06b6d4;
+      --cyan-light: #22d3ee;
+      --text-white: #f8fafc;
+    }
+
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+    /* DEEP OCEAN HYDRO BACKGROUND ANIMATION */
+    body {
+      background: radial-gradient(circle at 50% 0%, #0d284f 0%, var(--bg-ocean) 85%);
+      background-size: 200% 200%;
+      animation: hydroPulse 12s ease infinite;
+      color: var(--text-white);
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes hydroPulse {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* CARD HOVER & SHADOWS */
+    .hydro-card {
+      background: var(--card-navy);
+      border: 1px solid var(--border-cyan);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hydro-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(6, 182, 212, 0.35);
+      border-color: var(--cyan-light);
+    }
+
+    /* RGB NEON BORDER ANIMATION */
+    .rgb-container {
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid transparent;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: 1px;
+      animation: rgb-border 4s linear infinite;
+    }
+
+    @keyframes rgb-border {
+      0% { border-color: #ff0000; box-shadow: 0 0 12px #ff0000; color: #ff0000; }
+      33% { border-color: #00ff00; box-shadow: 0 0 12px #00ff00; color: #00ff00; }
+      66% { border-color: #00bfff; box-shadow: 0 0 12px #00bfff; color: #00bfff; }
+      100% { border-color: #ff0000; box-shadow: 0 0 12px #ff0000; color: #ff0000; }
+    }
+
+    /* HACKER TV SCREEN MONITOR */
+    .tv-screen {
+      background: #020b14;
+      border: 3px solid #06b6d4;
+      box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.5), 0 0 25px rgba(6, 182, 212, 0.3);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .tv-screen::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+      background-size: 100% 4px;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .terminal-logs {
+      color: #00ff66;
+      text-shadow: 0 0 5px rgba(0, 255, 102, 0.8);
+      font-size: 0.85rem;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .btn-cyber {
+      background: linear-gradient(135deg, #06b6d4, #0284c7);
+      transition: all 0.25s ease;
+    }
+
+    .btn-cyber:hover:not(:disabled) {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="w-full max-w-2xl mx-auto space-y-6">
+
+    <!-- HEADER BLOCK -->
+    <div class="hydro-card p-6 text-center border-amber-500/30">
+      <h1 class="text-3xl md:text-4xl font-black tracking-widest text-amber-400">ULTRA RECOVERY PRO</h1>
+      <p class="text-sm text-slate-300 mt-2">
+        💎 Managed by: <span class="text-amber-400 font-bold tracking-wider">VIKAS MISHRA</span>
+      </p>
+    </div>
+
+    <!-- MODE SELECTION -->
+    <div class="rgb-container text-sm md:text-base">
+      ⚙️ RECOVERY MODE SELECTION
+    </div>
+
+    <div class="hydro-card p-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-900/60 border border-cyan-500/20 cursor-pointer hover:border-cyan-400">
+          <input type="radio" name="recovery_mode" value="name_digits" checked onchange="toggleMode()" class="w-5 h-5 accent-cyan-400">
+          <span class="text-yellow-300 font-black text-lg">Name + 4 Digits</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-900/60 border border-cyan-500/20 cursor-pointer hover:border-cyan-400">
+          <input type="radio" name="recovery_mode" value="numeric_8" onchange="toggleMode()" class="w-5 h-5 accent-cyan-400">
+          <span class="text-yellow-300 font-black text-lg">8-Digit Numbers Only</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- SCANNER & INPUTS -->
+    <div class="hydro-card p-6 space-y-5">
+      
+      <div class="rgb-container text-xs md:text-sm">
+        🛰️ Satellite Scanner Active
+      </div>
+
+      <!-- FILE INPUT -->
+      <div class="relative flex flex-col items-center justify-center p-6 border-2 border-dashed border-cyan-500/40 rounded-2xl bg-cyan-950/10 hover:bg-cyan-950/20 transition">
+        <i class="fa-solid fa-file-pdf text-4xl text-cyan-400 mb-2"></i>
+        <span class="text-sm text-slate-300 font-semibold" id="fileName">Drop PDF here or click to browse</span>
+        <input type="file" id="pdfFileInput" accept="application/pdf" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleFileSelect(event)">
+      </div>
+
+      <!-- HINT ENGINE INPUT -->
+      <div id="hintBox" class="space-y-2">
+        <div class="rgb-container text-xs">
+          💡 Hint Engine Standby
+        </div>
+        <input 
+          type="text" 
+          id="customHint" 
+          placeholder="TYPE NAME HINT (E.G. VIKAS)" 
+          class="w-full h-12 px-4 rounded-xl bg-slate-900/80 border-2 border-red-500 text-red-500 font-black text-xl tracking-wider placeholder-red-700 focus:outline-none uppercase"
+          oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()"
+        >
+      </div>
+
+      <!-- EXECUTE BUTTON -->
+      <button id="execBtn" onclick="executeRecovery()" class="btn-cyber w-full py-4 rounded-xl text-white font-black text-lg flex items-center justify-center gap-3 shadow-lg">
+        <i class="fa-solid fa-rocket text-yellow-300"></i> <span id="btnText">EXECUTE RECOVERY ENGINE</span>
+      </button>
+
+    </div>
+
+    <!-- RETRO HACKER TV DISPLAY SCREEN MONITOR -->
+    <div id="tvContainer" class="hydro-card p-4 space-y-3" style="display: none;">
+      <div class="flex items-center justify-between text-xs text-cyan-400 font-mono px-2">
+        <span><i class="fa-solid fa-tv"></i> MATRIX TERMINAL MONITOR</span>
+        <span class="animate-pulse">● LIVE RECOVERY</span>
+      </div>
+      
+      <div class="tv-screen p-4 min-h-[160px]">
+        <div id="terminalConsole" class="terminal-logs space-y-1">
+          <div>[SYSTEM_INIT] Booting Ultra Recovery Protocol v2026...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT & DOWNLOAD -->
+    <div id="resultBox" class="hydro-card p-6 text-center space-y-4" style="display: none;">
+      <div class="text-emerald-400 font-black text-2xl animate-bounce">
+        🔓 VERIFIED FOUND: <span id="foundPass" class="text-yellow-300 underline">--</span>
+      </div>
+      <button id="downloadBtn" onclick="downloadUnlockedPDF()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-lg rounded-xl shadow-lg transition">
+        📥 DOWNLOAD UNLOCKED PDF
+      </button>
+    </div>
+
+    <div class="text-center text-xs text-slate-500 font-semibold tracking-wider pt-2">
+      VIKAS MISHRA PRIVATE SUITE © 2026
+    </div>
+
+  </div>
+
+  <script>
+    let selectedFileBytes = null;
+    let unlockedPdfBytes = null;
+
+    const COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "VIKA", "MISH", "SING", "KUMA", "SHAR", "VERM", "GUPT", "YADA", "PATE"];
+
+    function toggleMode() {
+      const mode = document.querySelector('input[name="recovery_mode"]:checked').value;
+      document.getElementById('hintBox').style.display = (mode === 'name_digits') ? 'block' : 'none';
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        document.getElementById('fileName').innerText = file.name;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          selectedFileBytes = new Uint8Array(e.target.result);
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    }
+
+    function logTerminal(msg) {
+      const consoleEl = document.getElementById('terminalConsole');
+      const div = document.createElement('div');
+      div.innerText = `> ${msg}`;
+      consoleEl.appendChild(div);
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+
+    async function executeRecovery() {
+      if (!selectedFileBytes) {
+        alert("Kripya pehle PDF file upload karein!");
+        return;
+      }
+
+      const tvContainer = document.getElementById('tvContainer');
+      const resultBox = document.getElementById('resultBox');
+      const terminalConsole = document.getElementById('terminalConsole');
+      
+      terminalConsole.innerHTML = "<div>[SYSTEM_INIT] Booting Ultra Recovery Engine v2026...</div>";
+      tvContainer.style.display = 'block';
+      resultBox.style.display = 'none';
+
+      const mode = document.querySelector('input[name="recovery_mode"]:checked').value;
+      const customHint = document.getElementById('customHint').value.trim().toUpperCase();
+
+      let prefixes = [];
+      if (mode === 'name_digits') {
+        if (customHint.length >= 4) {
+          for (let i = 0; i <= customHint.length - 4; i++) {
+            prefixes.push(customHint.substring(i, i + 4));
+          }
+        }
+        prefixes = prefixes.concat(COMMON_NAMES);
+        prefixes = [...new Set(prefixes)];
+      }
+
+      logTerminal(`MODE: ${mode === 'name_digits' ? 'NAME + 4 DIGITS' : 'NUMERIC 8-DIGITS'}`);
+      logTerminal("STARTING SCAN SEQUENCE...");
+
+      let foundPass = null;
+
+      if (mode === 'name_digits') {
+        for (let p of prefixes) {
+          logTerminal(`SCANNING PATTERN: [ ${p}XXXX ]`);
+          for (let n = 0; n < 10000; n++) {
+            const pass = `${p}${String(n).padStart(4, '0')}`;
+            if (await testPdfPassword(pass)) {
+              foundPass = pass;
+              break;
+            }
+          }
+          if (foundPass) break;
+        }
+      } else {
+        logTerminal("SCANNING 8-DIGIT NUMERIC SEQUENCES...");
+        for (let n = 0; n < 10000000; n++) {
+          const pass = String(n).padStart(8, '0');
+          if (n % 5000 === 0) logTerminal(`SCANNING RANGE: ${pass}...`);
+          if (await testPdfPassword(pass)) {
+            foundPass = pass;
+            break;
+          }
+        }
+      }
+
+      if (foundPass) {
+        logTerminal(`[SUCCESS] UNLOCKED PASSWORD: ${foundPass}`);
+        document.getElementById('foundPass').innerText = foundPass;
+        resultBox.style.display = 'block';
+      } else {
+        logTerminal("[FAILED] PASSWORD NOT FOUND IN CURRENT DICTIONARY.");
+        alert("Password nahi mila, kripya doosra hint try karein.");
+      }
+    }
+
+    async function testPdfPassword(password) {
+      try {
+        const pdfDoc = await PDFLib.PDFDocument.load(selectedFileBytes, { password });
+        unlockedPdfBytes = await pdfDoc.save();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function downloadUnlockedPDF() {
+      if (!unlockedPdfBytes) return;
+      const blob = new Blob([unlockedPdfBytes], { type: 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `Unlocked_${document.getElementById('foundPass').innerText}.pdf`;
+      link.click();
+    }
+  </script>
+</body>
+</html>
