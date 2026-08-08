@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vikas Mishra | Ultra PDF Recovery Engine Pro</title>
+  <title>Vikas Mishra | Enterprise PDF Recovery Suite</title>
 
-  <!-- Google Fonts & Font Awesome -->
+  <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Tailwind CSS & PDF-Lib Engine -->
@@ -17,109 +17,124 @@
 
   <style>
     :root {
-      --bg-ocean: #031329;
-      --card-navy: #0b1d3a;
-      --border-cyan: rgba(6, 182, 212, 0.25);
-      --accent-cyan: #06b6d4;
-      --cyan-light: #22d3ee;
-      --text-white: #f8fafc;
+      --bg-dark: #030a16;
+      --card-bg: #09182d;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-gold: #d97706;
+      --accent-gold-light: #fbbf24;
+      --accent-blue: #0284c7;
+      --text-primary: #f8fafc;
+      --text-muted: #94a3b8;
     }
 
-    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-    /* DEEP OCEAN HYDRO BACKGROUND ANIMATION */
     body {
-      background: radial-gradient(circle at 50% 0%, #0d284f 0%, var(--bg-ocean) 85%);
-      background-size: 200% 200%;
-      animation: hydroPulse 12s ease infinite;
-      color: var(--text-white);
+      background: #030a16;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(217, 119, 6, 0.08) 0px, transparent 50%);
+      color: var(--text-primary);
       min-height: 100vh;
       margin: 0;
-      padding: 20px;
+      padding: 30px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
     }
 
-    @keyframes hydroPulse {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    /* CARD HOVER & SHADOWS */
-    .hydro-card {
-      background: var(--card-navy);
-      border: 1px solid var(--border-cyan);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* PREMIUM ENTERPRISE GLASS CARDS */
+    .premium-card {
+      background: rgba(9, 24, 45, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
       border-radius: 20px;
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .hydro-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(6, 182, 212, 0.35);
-      border-color: var(--cyan-light);
+    .premium-card:hover {
+      border-color: rgba(251, 191, 36, 0.3);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+      transform: translateY(-2px);
     }
 
-    /* RGB NEON BORDER ANIMATION */
-    .rgb-container {
-      padding: 10px;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.85);
-      border: 2px solid transparent;
-      text-align: center;
-      font-weight: 800;
-      letter-spacing: 1px;
-      animation: rgb-border 4s linear infinite;
+    /* EXECUTIVE SECTION HEADER BANNER */
+    .section-badge {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 30px;
+      display: inline-block;
     }
 
-    @keyframes rgb-border {
-      0% { border-color: #ff0000; box-shadow: 0 0 12px #ff0000; color: #ff0000; }
-      33% { border-color: #00ff00; box-shadow: 0 0 12px #00ff00; color: #00ff00; }
-      66% { border-color: #00bfff; box-shadow: 0 0 12px #00bfff; color: #00bfff; }
-      100% { border-color: #ff0000; box-shadow: 0 0 12px #ff0000; color: #ff0000; }
-    }
-
-    /* HACKER TV SCREEN MONITOR */
-    .tv-screen {
-      background: #020b14;
-      border: 3px solid #06b6d4;
-      box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.5), 0 0 25px rgba(6, 182, 212, 0.3);
+    /* HACKER CYBER TV TERMINAL DISPLAY */
+    .tv-terminal {
+      background: #020710;
+      border: 1px solid rgba(2, 132, 199, 0.3);
       border-radius: 16px;
       position: relative;
       overflow: hidden;
       font-family: 'Fira Code', monospace;
     }
 
-    .tv-screen::before {
-      content: " ";
-      display: block;
+    .tv-terminal::before {
+      content: "";
       position: absolute;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
       background-size: 100% 4px;
-      z-index: 10;
+      z-index: 5;
       pointer-events: none;
-      opacity: 0.7;
+      opacity: 0.6;
     }
 
     .terminal-logs {
-      color: #00ff66;
-      text-shadow: 0 0 5px rgba(0, 255, 102, 0.8);
+      color: #34d399;
       font-size: 0.85rem;
-      max-height: 180px;
+      line-height: 1.6;
+      max-height: 200px;
       overflow-y: auto;
     }
 
-    .btn-cyber {
-      background: linear-gradient(135deg, #06b6d4, #0284c7);
+    /* CUSTOM FORM INPUTS */
+    .cyber-input {
+      background: rgba(3, 10, 22, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
       transition: all 0.25s ease;
     }
 
-    .btn-cyber:hover:not(:disabled) {
-      transform: scale(1.02);
-      box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+    .cyber-input:focus {
+      border-color: var(--accent-gold-light);
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+      outline: none;
+    }
+
+    /* EXECUTIVE ACTION BUTTON */
+    .btn-execute {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: all 0.25s ease;
+    }
+
+    .btn-execute:hover:not(:disabled) {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-execute:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   </style>
 </head>
@@ -127,93 +142,108 @@
 
   <div class="w-full max-w-2xl mx-auto space-y-6">
 
-    <!-- HEADER BLOCK -->
-    <div class="hydro-card p-6 text-center border-amber-500/30">
-      <h1 class="text-3xl md:text-4xl font-black tracking-widest text-amber-400">ULTRA RECOVERY PRO</h1>
-      <p class="text-sm text-slate-300 mt-2">
-        💎 Managed by: <span class="text-amber-400 font-bold tracking-wider">VIKAS MISHRA</span>
+    <!-- MAIN BRAND HEADER -->
+    <div class="premium-card p-8 text-center border-amber-500/20">
+      <div class="section-badge mb-3">Enterprise Recovery Engine</div>
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+        ULTRA RECOVERY <span class="text-amber-400">PRO</span>
+      </h1>
+      <p class="text-xs md:text-sm text-slate-400 mt-2 font-medium">
+        Developed & Maintained by <span class="text-amber-400 font-semibold">Vikas Mishra</span>
       </p>
     </div>
 
-    <!-- MODE SELECTION -->
-    <div class="rgb-container text-sm md:text-base">
-      ⚙️ RECOVERY MODE SELECTION
-    </div>
+    <!-- RECOVERY MODE SELECTOR -->
+    <div class="premium-card p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">01. Select Recovery Strategy</span>
+        <i class="fa-solid fa-sliders text-amber-400 text-sm"></i>
+      </div>
 
-    <div class="hydro-card p-5">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-900/60 border border-cyan-500/20 cursor-pointer hover:border-cyan-400">
-          <input type="radio" name="recovery_mode" value="name_digits" checked onchange="toggleMode()" class="w-5 h-5 accent-cyan-400">
-          <span class="text-yellow-300 font-black text-lg">Name + 4 Digits</span>
+        <label class="flex items-center gap-3 p-4 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:border-amber-500/50 transition">
+          <input type="radio" name="recovery_mode" value="name_digits" checked onchange="toggleMode()" class="w-4 h-4 accent-amber-400">
+          <div class="flex flex-col">
+            <span class="text-white font-bold text-sm">Name + 4 Digits</span>
+            <span class="text-xs text-slate-400">Targeted Smart Brute-Force</span>
+          </div>
         </label>
-        <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-900/60 border border-cyan-500/20 cursor-pointer hover:border-cyan-400">
-          <input type="radio" name="recovery_mode" value="numeric_8" onchange="toggleMode()" class="w-5 h-5 accent-cyan-400">
-          <span class="text-yellow-300 font-black text-lg">8-Digit Numbers Only</span>
+
+        <label class="flex items-center gap-3 p-4 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:border-amber-500/50 transition">
+          <input type="radio" name="recovery_mode" value="numeric_8" onchange="toggleMode()" class="w-4 h-4 accent-amber-400">
+          <div class="flex flex-col">
+            <span class="text-white font-bold text-sm">8-Digit Numeric</span>
+            <span class="text-xs text-slate-400">Sequential Digital Scan</span>
+          </div>
         </label>
       </div>
     </div>
 
-    <!-- SCANNER & INPUTS -->
-    <div class="hydro-card p-6 space-y-5">
+    <!-- FILE DROPZONE & HINT INPUT -->
+    <div class="premium-card p-6 space-y-5">
       
-      <div class="rgb-container text-xs md:text-sm">
-        🛰️ Satellite Scanner Active
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">02. Encrypted Target File</span>
+        <i class="fa-solid fa-shield-halved text-sky-400 text-sm"></i>
       </div>
 
-      <!-- FILE INPUT -->
-      <div class="relative flex flex-col items-center justify-center p-6 border-2 border-dashed border-cyan-500/40 rounded-2xl bg-cyan-950/10 hover:bg-cyan-950/20 transition">
-        <i class="fa-solid fa-file-pdf text-4xl text-cyan-400 mb-2"></i>
-        <span class="text-sm text-slate-300 font-semibold" id="fileName">Drop PDF here or click to browse</span>
+      <!-- FILE DROPZONE -->
+      <div class="relative flex flex-col items-center justify-center p-8 border border-dashed border-slate-700 rounded-xl bg-slate-950/40 hover:border-amber-500/40 hover:bg-slate-950/70 transition cursor-pointer">
+        <i class="fa-solid fa-file-pdf text-3xl text-amber-400/80 mb-3"></i>
+        <span class="text-sm text-slate-200 font-semibold" id="fileName">Click or drag PDF file to begin scan</span>
+        <span class="text-xs text-slate-500 mt-1">Supports standard encrypted PDF documents</span>
         <input type="file" id="pdfFileInput" accept="application/pdf" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleFileSelect(event)">
       </div>
 
-      <!-- HINT ENGINE INPUT -->
+      <!-- HINT ENGINE -->
       <div id="hintBox" class="space-y-2">
-        <div class="rgb-container text-xs">
-          💡 Hint Engine Standby
-        </div>
+        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Name Prefix Hint</label>
         <input 
           type="text" 
           id="customHint" 
-          placeholder="TYPE NAME HINT (E.G. VIKAS)" 
-          class="w-full h-12 px-4 rounded-xl bg-slate-900/80 border-2 border-red-500 text-red-500 font-black text-xl tracking-wider placeholder-red-700 focus:outline-none uppercase"
+          placeholder="e.g. VIKAS" 
+          class="cyber-input w-full h-12 px-4 rounded-xl text-amber-400 font-mono font-bold text-base placeholder-slate-600 uppercase"
           oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()"
         >
       </div>
 
       <!-- EXECUTE BUTTON -->
-      <button id="execBtn" onclick="executeRecovery()" class="btn-cyber w-full py-4 rounded-xl text-white font-black text-lg flex items-center justify-center gap-3 shadow-lg">
-        <i class="fa-solid fa-rocket text-yellow-300"></i> <span id="btnText">EXECUTE RECOVERY ENGINE</span>
+      <button id="execBtn" onclick="executeRecovery()" class="btn-execute w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2 shadow-lg">
+        <i class="fa-solid fa-bolt"></i> <span id="btnText">START RECOVERY DECRYPT</span>
       </button>
 
     </div>
 
-    <!-- RETRO HACKER TV DISPLAY SCREEN MONITOR -->
-    <div id="tvContainer" class="hydro-card p-4 space-y-3" style="display: none;">
-      <div class="flex items-center justify-between text-xs text-cyan-400 font-mono px-2">
-        <span><i class="fa-solid fa-tv"></i> MATRIX TERMINAL MONITOR</span>
-        <span class="animate-pulse">● LIVE RECOVERY</span>
+    <!-- HACKER CYBER TV TERMINAL SCREEN -->
+    <div id="tvContainer" class="premium-card p-4 space-y-3" style="display: none;">
+      <div class="flex items-center justify-between text-xs text-sky-400 font-mono px-2">
+        <span class="flex items-center gap-2"><i class="fa-solid fa-terminal"></i> RECOVERY MONITOR TERMINAL</span>
+        <span class="animate-pulse flex items-center gap-1.5 text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ACTIVE
+        </span>
       </div>
       
-      <div class="tv-screen p-4 min-h-[160px]">
+      <div class="tv-terminal p-4 min-h-[170px]">
         <div id="terminalConsole" class="terminal-logs space-y-1">
-          <div>[SYSTEM_INIT] Booting Ultra Recovery Protocol v2026...</div>
+          <div>[SYSTEM_INIT] Initializing Security Engine v2026...</div>
         </div>
       </div>
     </div>
 
-    <!-- RESULT & DOWNLOAD -->
-    <div id="resultBox" class="hydro-card p-6 text-center space-y-4" style="display: none;">
-      <div class="text-emerald-400 font-black text-2xl animate-bounce">
-        🔓 VERIFIED FOUND: <span id="foundPass" class="text-yellow-300 underline">--</span>
+    <!-- SUCCESSFUL DECRYPTION RESULT -->
+    <div id="resultBox" class="premium-card p-6 text-center space-y-4 border-emerald-500/30" style="display: none;">
+      <div class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Decryption Complete</div>
+      <div class="text-white font-extrabold text-2xl">
+        PASSWORD FOUND: <span id="foundPass" class="text-amber-400 font-mono underline decoration-amber-500/40">--</span>
       </div>
-      <button id="downloadBtn" onclick="downloadUnlockedPDF()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-lg rounded-xl shadow-lg transition">
-        📥 DOWNLOAD UNLOCKED PDF
+      <button id="downloadBtn" onclick="downloadUnlockedPDF()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-download"></i> DOWNLOAD UNLOCKED DOCUMENT
       </button>
     </div>
 
-    <div class="text-center text-xs text-slate-500 font-semibold tracking-wider pt-2">
-      VIKAS MISHRA PRIVATE SUITE © 2026
+    <!-- FOOTER -->
+    <div class="text-center text-xs text-slate-600 font-medium tracking-wide">
+      ENTERPRISE RECOVERY SUITE © 2026 • VIKAS MISHRA
     </div>
 
   </div>
@@ -222,7 +252,10 @@
     let selectedFileBytes = null;
     let unlockedPdfBytes = null;
 
-    const COMMON_NAMES = ["AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "VIKA", "MISH", "SING", "KUMA", "SHAR", "VERM", "GUPT", "YADA", "PATE"];
+    const COMMON_NAMES = [
+      "AMIT", "ANIL", "ARUN", "AJAY", "ABHI", "AKAS", "AMAN", "VIKA", "MISH", "SING", 
+      "KUMA", "SHAR", "VERM", "GUPT", "YADA", "PATE", "CHAU", "KHAN", "RAWA", "NEGI"
+    ];
 
     function toggleMode() {
       const mode = document.querySelector('input[name="recovery_mode"]:checked').value;
@@ -251,7 +284,7 @@
 
     async function executeRecovery() {
       if (!selectedFileBytes) {
-        alert("Kripya pehle PDF file upload karein!");
+        alert("Please select an encrypted PDF file first.");
         return;
       }
 
@@ -259,7 +292,7 @@
       const resultBox = document.getElementById('resultBox');
       const terminalConsole = document.getElementById('terminalConsole');
       
-      terminalConsole.innerHTML = "<div>[SYSTEM_INIT] Booting Ultra Recovery Engine v2026...</div>";
+      terminalConsole.innerHTML = "<div>[SYSTEM_INIT] Initializing Security Engine v2026...</div>";
       tvContainer.style.display = 'block';
       resultBox.style.display = 'none';
 
@@ -277,14 +310,14 @@
         prefixes = [...new Set(prefixes)];
       }
 
-      logTerminal(`MODE: ${mode === 'name_digits' ? 'NAME + 4 DIGITS' : 'NUMERIC 8-DIGITS'}`);
-      logTerminal("STARTING SCAN SEQUENCE...");
+      logTerminal(`STRATEGY: ${mode === 'name_digits' ? 'TARGETED NAME + 4 DIGITS' : '8-DIGIT NUMERIC SCAN'}`);
+      logTerminal("EXECUTING DECRYPTION SEQUENCE...");
 
       let foundPass = null;
 
       if (mode === 'name_digits') {
         for (let p of prefixes) {
-          logTerminal(`SCANNING PATTERN: [ ${p}XXXX ]`);
+          logTerminal(`TESTING PATTERN: [ ${p}XXXX ]`);
           for (let n = 0; n < 10000; n++) {
             const pass = `${p}${String(n).padStart(4, '0')}`;
             if (await testPdfPassword(pass)) {
@@ -295,10 +328,10 @@
           if (foundPass) break;
         }
       } else {
-        logTerminal("SCANNING 8-DIGIT NUMERIC SEQUENCES...");
+        logTerminal("SCANNING NUMERIC KEY RANGE...");
         for (let n = 0; n < 10000000; n++) {
           const pass = String(n).padStart(8, '0');
-          if (n % 5000 === 0) logTerminal(`SCANNING RANGE: ${pass}...`);
+          if (n % 5000 === 0) logTerminal(`CURRENT RANGE TESTED: ${pass}...`);
           if (await testPdfPassword(pass)) {
             foundPass = pass;
             break;
@@ -307,12 +340,12 @@
       }
 
       if (foundPass) {
-        logTerminal(`[SUCCESS] UNLOCKED PASSWORD: ${foundPass}`);
+        logTerminal(`[SUCCESS] UNLOCKED PASSWORD VERIFIED: ${foundPass}`);
         document.getElementById('foundPass').innerText = foundPass;
         resultBox.style.display = 'block';
       } else {
-        logTerminal("[FAILED] PASSWORD NOT FOUND IN CURRENT DICTIONARY.");
-        alert("Password nahi mila, kripya doosra hint try karein.");
+        logTerminal("[FAILED] PASSWORD NOT FOUND IN DICTIONARY.");
+        alert("Password not found. Please try with a different hint.");
       }
     }
 
