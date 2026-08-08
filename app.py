@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import os
 
-# Set page configuration
+# Streamlit Page Configuration
 st.set_page_config(
     page_title="Vikas Mishra | Ultra Recovery Pro",
     page_icon="🔑",
@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hide Streamlit Default Top Header & Footer Padding
+# Hide Streamlit Default UI Headers & Paddings
 st.markdown("""
     <style>
         #MainMenu {visibility: hidden;}
@@ -25,13 +25,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Function to read HTML File
+# Helper Function to Read index.html
 def load_html_file(file_path):
     if os.path.exists(file_path):
         with open(file_path, "r", encoding="utf-8") as f:
             return f.read()
-    return "<h3>Error: index.html file not found!</h3>"
+    return "<h3 style='color:red;'>Error: index.html file not found in directory!</h3>"
 
-# Render custom HTML/CSS/JS inside Streamlit
+# Render Full Custom Deep Ocean UI
 html_content = load_html_file("index.html")
-components.html(html_content, height=1000, scrolling=True)
+components.html(html_content, height=1050, scrolling=True)
