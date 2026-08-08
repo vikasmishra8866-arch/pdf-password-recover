@@ -14,7 +14,6 @@
     :root {
       --bg-ocean: #031329;
       --card-navy: #0b1d3a;
-      --border-blue: #1e3a8a;
       --border-cyan: rgba(6, 182, 212, 0.25);
       --accent-cyan: #06b6d4;
       --cyan-light: #22d3ee;
@@ -328,7 +327,6 @@
       if (hint) addLog(`APPLYING NAME HINT: ${hint}`);
       addLog("DECRYPTION MATRIX RUNNING IN BACKEND ENGINE...");
 
-      // SIMULATION OF BACKEND SPEED CONNECTIVITY
       setTimeout(() => {
         const dummyPass = hint ? `${hint.substring(0, 4)}2004` : "12345678";
         cachedPassword = dummyPass;
@@ -339,7 +337,6 @@
         document.getElementById('foundPasswordDisplay').innerText = dummyPass;
         resultBox.style.display = 'block';
 
-        // LOCAL STORAGE CACHE
         localStorage.setItem('last_recovered_pass', dummyPass);
         sendDynamicHeight();
       }, 1800);
